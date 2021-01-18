@@ -1,0 +1,9 @@
+/* Importing Bootswatch variables. */
+@import "~bootswatch/dist/superhero/variables";
+
+// Override Bootstrap variables
+@import "./variables";
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/superhero/bootswatch";
