@@ -16,18 +16,24 @@ export class AppComponent {
     const printArea = document.querySelector('#print-area') as HTMLElement;
 
     if (printArea)
-      html2canvas(printArea).then((canvas) => {
+      html2canvas(printArea, {
+        backgroundColor: '#FFFFFF',
+        scale: 0.5,
+      }).then((canvas) => {
         this.capturedImage = canvas.toDataURL('image/png');
         console.log('canvas.toDataURL() -->' + this.capturedImage);
-        const doc = new jsPDF();
-        doc.addImage(
-          this.capturedImage,
-          'PNG',
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
+        const doc = new jsPDF({
+          orientation: 'p',
+          unit: 'cm',
+          format: [6, 4],
+        });
+
+        // Adjust image size to page size
+        const imgProps = doc.getImageProperties(this.capturedImage);
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        doc.addImage(this.capturedImage, 'PNG', 0, 0, pdfWidth, pdfHeight);
         doc.save('test.pdf');
       });
   }
